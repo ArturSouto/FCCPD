@@ -1,0 +1,44 @@
+version: "3.9"
+
+services:
+
+  web:
+    build: ./web
+    container_name: web_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+      - cache
+    environment:
+      DB_HOST: db
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: appdb
+      CACHE_HOST: cache
+    networks:
+      - internal_net
+
+  db:
+    image: mysql:8.0
+    container_name: db_app
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: aplicacao
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - internal_net
+
+  cache:
+    image: redis:7
+    container_name: cache_app
+    networks:
+      - internal_net
+
+networks:
+  internal_net:
+    driver: bridge
+
+volumes:
+  db_data:

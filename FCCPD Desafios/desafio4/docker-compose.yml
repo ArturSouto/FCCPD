@@ -1,0 +1,14 @@
+services:
+  user:
+    build: ./user
+    container_name: user
+    ports:
+      - "5001:5001"
+
+  consumer:
+    build: ./consumer
+    container_name: consumer
+    ports:
+      - "5002:5002"
+    depends_on:
+      - user

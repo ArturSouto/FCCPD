@@ -1,0 +1,20 @@
+version: "3.9"
+
+services:
+  gateway:
+    build: ./gateway
+    ports:
+      - "8080:8000"
+    depends_on:
+      - user-service
+      - order-service
+
+  user-service:
+    build: ./user
+    expose:
+      - "5001"
+
+  order-service:
+    build: ./order
+    expose:
+      - "5002"
