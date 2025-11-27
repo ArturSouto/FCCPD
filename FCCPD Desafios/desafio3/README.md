@@ -12,4 +12,4 @@ Ao usar o comando abaixo dentro da pasta, vai rodar a aplicação:
 
 esse comando irá ler o docker-compose.yml e vai criar container e configurá-lo.
 
-Vai mostrar funcionando em localhost, basta acessar `http://localhost:8080/`
+Vai mostrar funcionando em localhost, basta acessar http://localhost:8080/
