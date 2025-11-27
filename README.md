@@ -50,7 +50,7 @@ Ao usar o comando abaixo dentro da pasta, vai rodar a aplicação:
 
 esse comando irá ler o docker-compose.yml e vai criar container e configurá-lo.
 
-Vai mostrar funcionando em localhost, basta acessar `http://localhost:8080/`
+Vai mostrar funcionando em localhost, basta acessar http://localhost:8080/
 
 
 ## Desafio 4
@@ -68,9 +68,9 @@ Para rodar basta usar o comando abaixo:
 
 `docker compose up --build`
 
-Tudo que esta no app.py da pasta consumer vai aparecer em `http://localhost:5002/combined` (aqui vai mostrar formatado a lista de usuários)
+Tudo que esta no app.py da pasta consumer vai aparecer em http://localhost:5002/combined (aqui vai mostrar formatado a lista de usuários)
 
-Tudo que esta no app.py da pasta user vai aparecer em `http://localhost:5001/users`
+Tudo que esta no app.py da pasta user vai aparecer em http://localhost:5001/users
 
 ## Desafio 5
 Na pasta gateway o app.py irá servir como uma central que vai receber requisições do app.py(que esta na pasta order) e no app.py(que esta na pasta user)
