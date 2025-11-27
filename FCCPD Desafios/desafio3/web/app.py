@@ -5,7 +5,6 @@ import os
 
 app = Flask(__name__)
 
-# Redis
 cache = redis.Redis(host=os.getenv("CACHE_HOST"), port=6379)
 
 @app.route("/")

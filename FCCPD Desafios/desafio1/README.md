@@ -1,7 +1,9 @@
-Servidor
-app.py->cria uma aplicação, define a rota e a porta do servidor para o cliente se hospedar
-Dockerfile->São as dependências necessárias para a parte do servidor e a executa
+Na pasta cliente o client.py vai ficar fazendo requisições a cada 3 segundos
 
-Cliente
-client.py-> Faz requisições para o servidor, fica tentando acessar o servidor e vai mostrar uma mensagem caso consiga ou caso não consiga fazer a conexão
-Dockerfile->Irão instalar as dependências e irá executar o client.py
+Na pasta server o app.py vai apenas responder e confirmar quando o serviço funcionar e estiver ativo
+
+Os Dockerfile vão preparar o ambiente da aplicação
+
+Para rodar a aplicação basta usar o comando abaixo:
+
+`docker-compose up --build`

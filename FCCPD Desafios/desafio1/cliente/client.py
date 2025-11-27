@@ -1,14 +1,17 @@
 import time
 import requests
 
-url = "http://server:8080"
+SERVER_URL = "http://server:8080"
+
+print("Cliente iniciado...", flush=True)
 
 while True:
     try:
-        print("Realizando requisição...")
-        resposta = requests.get(url)
-        print("Resposta:", resposta.text)
+        print("------", flush=True)
+        print("Requisitando servidor...", flush=True)
+        response = requests.get(SERVER_URL, timeout=5)
+        print("Resposta:", response.text, flush=True)
     except Exception as e:
-        print("Erro ao conectar:", e)
-
+        print("Erro ao acessar o servidor:", e, flush=True)
+    
     time.sleep(3)

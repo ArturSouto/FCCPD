@@ -13,7 +13,7 @@ def combined():
 
         result = []
         for user in users:
-            result.append(f"Usuario {user['name']} desde {user['activeSince']}\n")
+            result.append(f"Usuario {user['name']} \tdesde {user['activeSince']}\n")
 
         return "\n".join(result)
 
