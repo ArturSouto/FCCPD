@@ -12,6 +12,6 @@ Para rodar basta usar o comando abaixo:
 
 `docker compose up --build`
 
-Tudo que esta no app.py da pasta consumer vai aparecer em `http://localhost:5002/combined` (aqui vai mostrar formatado a lista de usuários)
+Tudo que esta no app.py da pasta consumer vai aparecer em http://localhost:5002/combined (aqui vai mostrar formatado a lista de usuários)
 
-Tudo que esta no app.py da pasta user vai aparecer em `http://localhost:5001/users`
+Tudo que esta no app.py da pasta user vai aparecer em http://localhost:5001/users
