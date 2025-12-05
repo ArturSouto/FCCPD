@@ -1,15 +1,52 @@
 # Projeto de FCCPD
 
 ## Desafio 1
-Na pasta cliente o client.py vai ficar fazendo requisições a cada 3 segundos
+Temos:
 
-Na pasta server o app.py vai apenas responder e confirmar quando o serviço funcionar e estiver ativo
+Um servidor Flask rodando na porta 8080
 
-Os Dockerfile vão preparar o ambiente da aplicação
+Um cliente em Python que envia requisições ao servidor a cada 3 segundos
 
-Para rodar a aplicação basta usar o comando abaixo:
+Ambos os serviços rodando na mesma rede Docker, comunicando-se pelo nome do serviço (server)
 
-`docker-compose up --build`
+## O que foi feito
+
+Criado um servidor Flask que responde "Servidor ativo! Comunicação OK!"
+
+Cliente Python usando requests para fazer requisições periódicas ao servidor
+
+Containers conectados pela rede interna criada pelo docker-compose
+
+Cliente acessa o servidor usando o hostname do serviço 
+
+Logs do cliente mostram cada requisição e resposta
+
+## Estrutura do desafio
+```
+desafio1/
+  docker-compose.yml
+  server/
+    Dockerfile
+    app.py
+  client/
+    Dockerfile
+    client.py
+```
+## Como executar
+
+Dentro da pasta do desafio:
+
+```
+docker-compose up
+```
+
+## Após subir:
+
+O cliente começará automaticamente a fazer requisições ao servidor a cada 3 segundos.
+
+Deve retornar:
+
+Servidor ativo! Comunicação OK!
 
 
 
@@ -36,21 +73,53 @@ Desse jeito já vai funcionar e, para completar, faça uma consulta para mostrar
 
 
 ## Desafio 3 
-O app.py utiliza flask (parte web solicitada), MySQL (para a parte de database) e Redis (para a parte do cache);
 
-Dockerfile vai preparar o ambiente da aplicação
+## O que a aplicação faz
 
-O requirements.txt vai, ao rodar, instalar tudo que for necessário para a aplicação
+Sempre que a rota principal é acessada:
+
+Um contador no Redis é incrementado.
+
+A API se conecta ao MySQL e executa um SELECT 'Funcionando'.
+
+A resposta retorna:
 
 
+O resultado do banco ("Funcionando")
 
-Ao usar o comando abaixo dentro da pasta, vai rodar a aplicação:
 
-`docker-compose up -d`
+O total de visitas armazenado no Redis
 
-esse comando irá ler o docker-compose.yml e vai criar container e configurá-lo.
+Exemplo de resposta
 
-Vai mostrar funcionando em localhost, basta acessar http://localhost:8080/
+Funcionando
+Visitas registradas no Redis: 4
+
+Estrutura do desafio
+```
+desafio3/
+  docker-compose.yml
+  web/
+    Dockerfile
+    app.py
+    requirements.txt
+```
+
+## Como executar
+
+Dentro da pasta do desafio:
+
+```
+docker-compose up
+```
+
+
+Quando tudo estiver rodando, acesse:
+
+http://localhost:8080/
+
+
+Cada refresh aumenta o contador armazenado no Redis.
 
 
 ## Desafio 4
