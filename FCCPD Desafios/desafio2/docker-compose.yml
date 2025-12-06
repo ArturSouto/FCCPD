@@ -14,5 +14,14 @@ services:
       - pgdata:/var/lib/postgresql/data
       - ./carros.sql:/docker-entrypoint-initdb.d/carros.sql
 
+  reader:
+    build: .
+    container_name: desafio2_reader
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    restart: always
+
 volumes:
   pgdata:
