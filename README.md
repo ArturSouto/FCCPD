@@ -123,39 +123,182 @@ Cada refresh aumenta o contador armazenado no Redis.
 
 
 ## Desafio 4
-Na parte do consumer tem o arquivo app.py que vai buscar do app.py (que está na pasta user) a lista de usuários e vai mostrar formatado
+Neste desafio foram criados dois microsserviços independentes, que se comunicam entre si através de requisições HTTP, funcionando na mesma rede Docker:
 
-Dockerfile vai preparar o ambiente da aplicação
+service_usuarios (user) vai fornecer dados de usuários
 
-Na parte do user o app.py vai basicamente fornecer uma lista de usuários (de forma desorganizada) 
+service_relatorios (consumer) vai consomir o serviço de usuários e monta frases já formatadas
 
-Dockerfile vai preparar o ambiente da aplicação
+O objetivo é demonstrar comunicação entre microsserviços simples usando Flask e Docker Compose.
 
-Ambos tem requirements.txt e, ao rodar, instalar tudo que for necessário para a aplicação
+## Visão geral
+1. service_usuarios
 
-Para rodar basta usar o comando abaixo:
+Expondo a rota: /users
 
-`docker compose up --build`
+Retorna uma lista JSON com usuários contendo:
+```
+id
+name
+activeSince
+```
+(O activeSince é para mostrar quando o usuário ficou ativo no sistema)
 
-Tudo que esta no app.py da pasta consumer vai aparecer em http://localhost:5002/combined (aqui vai mostrar formatado a lista de usuários)
+2. service_relatorios
 
-Tudo que esta no app.py da pasta user vai aparecer em http://localhost:5001/users
+Faz uma requisição HTTP ao serviço de usuários:
+http://user:5001/users
+
+Processa os dados recebidos
+
+Retorna frases formatadas com o nome e a data de atividade de cada usuário
+
+Cada serviço possui seu próprio Dockerfile e suas próprias dependências.
+
+## Estrutura do desafio
+```
+desafio_microsservicos/
+  docker-compose.yml
+  user/
+    Dockerfile
+    app.py
+    requirements.txt
+  consumer/
+    Dockerfile
+    app.py
+    requirements.txt
+```
+## Como executar
+
+Dentro da pasta do desafio:
+```
+docker-compose up
+```
+
+Isso fará:
+
+Subir o microsserviço user (Flask na porta interna 5001, exposta como 5001)
+
+Subir o microsserviço consumer (Flask na porta interna 5002, exposta como 5002)
+
+Criar a rede interna automática para permitir comunicação entre eles
+
+Testando os serviços
+1. Microsserviço de usuários
+
+No navegador:
+
+curl http://localhost:5001/users
+
+
+Resposta esperada:
+```
+[
+  {"id": 1, "name": "Alice", "activeSince": "2022-01-10"},
+  {"id": 2, "name": "Bruno", "activeSince": "2023-03-15"},
+  {"id": 3, "name": "Carlos", "activeSince": "2024-05-01"},
+  {"id": 4, "name": "Daniela", "activeSince": "2021-11-22"},
+  {"id": 5, "name": "Eduardo", "activeSince": "2020-07-08"},
+  {"id": 6, "name": "Fernanda", "activeSince": "2023-09-19"},
+  {"id": 7, "name": "Gabriel", "activeSince": "2022-06-30"}
+]
+```
+2. Microsserviço consumidor
+curl http://localhost:5002/combined
+
+
+Exemplo de resposta:
+```
+Usuario Alice     desde 2022-01-10
+Usuario Bruno     desde 2023-03-15
+Usuario Carlos    desde 2024-05-01
+Usuario Daniela   desde 2021-11-22
+...
+```
 
 ## Desafio 5
-Na pasta gateway o app.py irá servir como uma central que vai receber requisições do app.py(que esta na pasta order) e no app.py(que esta na pasta user)
+Neste desafio foi criada uma arquitetura com três serviços que trabalham juntos por meio de uma comunicação HTTP dentro do Docker:
 
-Na pasta order o app.py vai fornecer informações de pedidos organizadas, pegando informações que está na app.py(que está na pasta user)
+Um microsserviço de usuários
 
-na pasta user o app.py vai fornecer uma lista de usuários
+Um microsserviço de pedidos
 
-Todos os Dockerfile vão preparar o ambiente da aplicação
+Um API Gateway, que centraliza o acesso aos dois serviços
 
-Todos os requirements.txt, ao rodar, instalar tudo que for necessário para a aplicação
+O objetivo é demonstrar como um único ponto de entrada pode organizar e unificar chamadas para múltiplos microsserviços internos.
 
-`docker-compose up`     
+## Visão geral dos serviços
+service_usuarios
 
-Irá mostrar tudo que aparece no app.py do gateway http://localhost:8080/
+Rota: GET /users
 
-Irá mostrar tudo que aparece no app.py do user http://localhost:8080/users
+Retorna uma lista de usuários em formato JSON.
 
-Irá mostrar tudo que aparece no app.py do orders http://localhost:8080/orders
+service_pedidos
+
+Rota: GET /orders
+
+Retorna uma lista de pedidos em formato JSON, contendo ID do pedido, usuário associado e total.
+
+gateway
+
+Rota: GET /users
+Encaminha a requisição para user-service
+
+Rota: GET /orders
+Encaminha a requisição para order-service
+
+Rota: GET /
+Apenas retorna uma mensagem indicando que o gateway está funcionando.
+
+Do ponto de vista do cliente, somente o gateway é acessado.
+
+## Estrutura do desafio
+``` 
+desafio_gateway/
+  docker-compose.yml
+  gateway/
+    Dockerfile
+    app.py
+    requirements.txt
+  user/
+    Dockerfile
+    app.py
+    requirements.txt
+  order/
+    Dockerfile
+    app.py
+    requirements.txt
+```
+## Como executar
+
+Dentro da pasta do desafio:
+```
+docker-compose up
+```
+
+O Docker Compose irá:
+
+Subir o microsserviço user-service
+
+Subir o microsserviço order-service
+
+Subir o API Gateway
+
+Criar automaticamente a rede interna para permitir comunicação via DNS interno
+
+## Testando o sistema pelo Gateway
+
+Todas as chamadas devem ser feitas para o gateway na porta 8080 do host.
+
+### Listar usuários:
+http://localhost:8080/users
+
+### Listar pedidos:
+http://localhost:8080/orders
+
+## Para mostrar que o gateway está funcionando:
+http://localhost:8080/
+
+
+As respostas vêm do gateway, que por sua vez consulta os outros microsserviços.
