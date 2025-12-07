@@ -1,6 +1,6 @@
 # Projeto de FCCPD
 
-## Desafio 1
+# Desafio 1
 Temos:
 
 Um servidor Flask rodando na porta 8080
@@ -50,29 +50,50 @@ Servidor ativo! Comunicação OK!
 
 
 
-## Desafio 2
-carros.sql->Vai criar uma tabela se não existir e vai inserir os carros
+# Desafio 2
+Esse desafio mostra como dados armazenados em um banco PostgreSQL permanecem intactos mesmo após remover o container.
+Foi criado um banco com volume persistente e um serviço em Python/Flask que consulta os dados.
 
-docker-compose.yml->Vai criar e configurar o SQL, vai definir as opções para o ambiente virtual e vai permitir analisar informações após rodar
+## O que foi feito
 
-Para rodar:
+Criado um container PostgreSQL que executa automaticamente um script carros.sql.
 
-Acesse a pasta onde estão os arquivos e utilize o comando abaixo:
+As informações são salvas em um volume Docker chamado pgdata.
 
-`docker-compose up -d`
+Um segundo container (reader) conecta-se ao banco e retorna a lista de carros cadastrados via API.
 
-esse comando irá ler o docker-compose.yml e vai criar container e configurá-lo.
+O container do banco foi removido e iniciado novamente para comprovar que os dados continuam salvos graças ao volume.
 
-Para executar utilize o comando abaixo:
+## Estrutura do desafio
+```
+desafio2/
+  docker-compose.yml
+  carros.sql
+  reader/
+    Dockerfile
+    reader.py
+```
 
-`docker exec -it desafio2_db psql -U admin -d desafio2`
+## Como executar
 
-Desse jeito já vai funcionar e, para completar, faça uma consulta para mostrar os carros. Segue a consulta abaixo:
+Entre na pasta do desafio:
+```
+cd desafio2
+```
 
-`select * from carros;`
+Suba os containers:
+```
+docker-compose up
+```
+
+O serviço reader subirá automaticamente e você poderá acessar os dados no localhost:
+
+http://localhost:5000/carros
 
 
-## Desafio 3 
+Ele exibirá a lista de carros cadastrados no banco de dados
+
+# Desafio 3 
 
 ## O que a aplicação faz
 
@@ -122,7 +143,7 @@ http://localhost:8080/
 Cada refresh aumenta o contador armazenado no Redis.
 
 
-## Desafio 4
+# Desafio 4
 Neste desafio foram criados dois microsserviços independentes, que se comunicam entre si através de requisições HTTP, funcionando na mesma rede Docker:
 
 service_usuarios (user) vai fornecer dados de usuários
@@ -216,7 +237,7 @@ Usuario Daniela   desde 2021-11-22
 ...
 ```
 
-## Desafio 5
+# Desafio 5
 Neste desafio foi criada uma arquitetura com três serviços que trabalham juntos por meio de uma comunicação HTTP dentro do Docker:
 
 Um microsserviço de usuários
